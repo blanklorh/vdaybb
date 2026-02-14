@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=393, height=852, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Valentine 💖</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    width: 393px;
+    height: 852px;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: url('background.png') no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Overlay */
+.overlay {
+    background: rgba(255, 182, 193, 0.85);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+/* SCREEN 1 */
+.screen1 {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding-top: 180px;
+    color: white;
+    transition: opacity 1s ease;
+}
+
+h1 {
+    font-size: 26px;
+    text-shadow: 2px 2px 6px #ff69b4;
+}
+
+.buttons {
+    margin-top: 60px;
+    position: relative;
+    height: 200px;
+}
+
+button {
+    padding: 14px 28px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    transition: all 0.3s ease;
+}
+
+/* YES */
+#yesBtn {
+    background-color: #40e0d0;
+    color: white;
+    left: 60px;
+    top: 60px;
+    animation: pulse 1.2s infinite;
+}
+
+/* NO */
+#noBtn {
+    background-color: #ffb6c1;
+    color: white;
+    left: 200px;
+    top: 60px;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(64,224,208,0.7); }
+    70% { box-shadow: 0 0 0 12px rgba(64,224,208,0); }
+    100% { box-shadow: 0 0 0 0 rgba(64,224,208,0); }
+}
+
+/* Confetti */
+.confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    top: 0;
+    opacity: 0.8;
+    animation: fall 1s linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(800px) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* SCREEN 2 */
+.screen2 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(#ffb6c1, #40e0d0);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.screen2 img {
+    width: 300px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.6);
+}
+
+.screen2 h2 {
+    color: white;
+    margin-top: 20px;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* GIF */
+.gif-grid {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.gif-box {
+    width: 113px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<div class="screen1" id="screen1">
+    <h1>HAI BB, WILL YOU BE MY VALENTINE? 💕</h1>
+
+    <div class="buttons">
+        <button id="yesBtn">YES 💖</button>
+        <button id="noBtn">NO 😜</button>
+    </div>
+</div>
+
+<div class="screen2" id="screen2">
+    <img src="image2.jpg" alt="Valentine">
+    <h2>I knew you would hehehehe! I LOVE U BEB! 💞</h2>
+</div>
+
+<div class="gif-grid">
+    <div class="gif-box">
+        <div class="tenor-gif-embed"
+             data-postid="1312436877492002001"
+             data-share-method="host"
+             data-aspect-ratio="0.995745"
+             data-width="100%">
+        </div>
+    </div>
+</div>
+
+<script async src="https://tenor.com/embed.js"></script>
+
+<!-- Audio -->
+<audio id="coinSound" src="coin.mp3"></audio>
+<audio id="bgMusic" src="shine-your-light.mp3" loop></audio>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const screen1 = document.getElementById("screen1");
+const screen2 = document.getElementById("screen2");
+const coinSound = document.getElementById("coinSound");
+const bgMusic = document.getElementById("bgMusic");
+
+let noScale = 1;
+let noClicks = 0;
+
+/* Start music on first tap (mobile autoplay fix) */
+document.body.addEventListener("click", function startMusic() {
+    bgMusic.play().catch(()=>{});
+    document.body.removeEventListener("click", startMusic);
+});
+
+/* NO Button Logic */
+noBtn.addEventListener("click", () => {
+    noClicks++;
+
+    if (noClicks >= 5) {
+        fakeCrash();
+        return;
+    }
+
+    let radius = 70;
+    let x = (Math.random() * radius * 2) - radius;
+    let y = (Math.random() * radius * 2) - radius;
+
+    noScale *= 0.85;
+    noBtn.style.transform = `translate(${x}px, ${y}px) scale(${noScale})`;
+});
+
+/* YES Button Logic */
+yesBtn.addEventListener("click", () => {
+    coinSound.play();
+    launchConfetti();
+
+    setTimeout(() => {
+        screen1.style.opacity = "0";
+        setTimeout(() => {
+            screen2.style.opacity = "1";
+        }, 1000);
+    }, 600);
+});
+
+/* Confetti Explosion */
+function launchConfetti() {
+    for (let i = 0; i < 60; i++) {
+        let confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+
+        confetti.style.left = Math.random() * 393 + "px";
+        confetti.style.backgroundColor =
+            ["#ff69b4", "#40e0d0", "#ffffff", "#ffd1dc"][Math.floor(Math.random()*4)];
+
+        confetti.style.animationDuration = (Math.random() * 1 + 0.5) + "s";
+
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 1200);
+    }
+}
+
+/* FAKE CRASH */
+function fakeCrash() {
+    document.body.innerHTML = `
+        <div style="
+            width:393px;
+            height:852px;
+            background:black;
+            color:#ff3b3b;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            font-family:monospace;
+            text-align:center;
+            padding:20px;
+            animation: glitch 0.1s infinite alternate;
+        ">
+            <h2>⚠ SYSTEM ERROR ⚠</h2>
+            <p>App crashed due to emotional damage.</p>
+            <p>Rebooting love engine...</p>
+        </div>
+        <style>
+            @keyframes glitch {
+                from { transform: translateX(-2px); }
+                to { transform: translateX(2px); }
+            }
+        </style>
+    `;
+
+    setTimeout(() => {
+        document.body.innerHTML = `
+            <div style="
+                width:393px;
+                height:852px;
+                background:linear-gradient(#ffb6c1,#40e0d0);
+                display:flex;
+                flex-direction:column;
+                justify-content:center;
+                align-items:center;
+                font-family:'Comic Sans MS', cursive;
+                color:white;
+                text-align:center;
+                padding:20px;
+            ">
+                <h2>Just kidding... you can't escape 😘</h2>
+                <button onclick="location.reload()" style="
+                    margin-top:30px;
+                    padding:18px 40px;
+                    font-size:22px;
+                    border-radius:40px;
+                    border:none;
+                    background:#40e0d0;
+                    color:white;
+                    animation:pulse 1s infinite;
+                ">YES 💖</button>
+            </div>
+        `;
+    }, 2500);
+}
+</script>
+
+</body>
+</html>
