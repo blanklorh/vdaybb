@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=393, height=852, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Valentine 💖</title>
+<title>Valentines Day 💖</title>
+
+<link href="https://fonts.cdnfonts.com/css/cheri" rel="stylesheet">
 
 <style>
 body {
@@ -11,292 +13,245 @@ body {
     padding: 0;
     width: 393px;
     height: 852px;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    background: url('background.png') no-repeat center center;
-    background-size: cover;
     overflow: hidden;
+    font-family: 'Cheri', cursive;
+    background: url('background.jpg') no-repeat center center;
+    background-size: cover;
     position: relative;
+    transition: filter 0.6s ease, opacity 0.6s ease;
 }
 
-/* Overlay */
-.overlay {
-    background: rgba(255, 182, 193, 0.85);
-    width: 100%;
-    height: 100%;
+/* Floating hearts */
+.heart {
     position: absolute;
+    font-size: 16px;
+    animation: floatUp linear infinite;
 }
 
-/* SCREEN 1 */
-.screen1 {
-    position: relative;
-    z-index: 2;
+@keyframes floatUp {
+    from { transform: translateY(850px); opacity:1; }
+    to { transform: translateY(-50px); opacity:0; }
+}
+
+/* Main content */
+.main-content {
     text-align: center;
-    padding-top: 180px;
-    color: white;
-    transition: opacity 1s ease;
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    width: 100%;
 }
 
 h1 {
-    font-size: 26px;
-    text-shadow: 2px 2px 6px #ff69b4;
+    font-size: 28px;
+    color: white;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
 }
 
 .buttons {
-    margin-top: 60px;
-    position: relative;
-    height: 200px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 70px;
 }
 
-button {
-    padding: 14px 28px;
-    font-size: 18px;
-    border-radius: 30px;
-    border: none;
+.buttons img {
+    width: 140px;
     cursor: pointer;
-    position: absolute;
-    transition: all 0.3s ease;
 }
 
-/* YES */
 #yesBtn {
-    background-color: #40e0d0;
-    color: white;
-    left: 60px;
-    top: 60px;
-    animation: pulse 1.2s infinite;
+    animation: glow 1.8s infinite;
 }
 
-/* NO */
-#noBtn {
-    background-color: #ffb6c1;
-    color: white;
-    left: 200px;
-    top: 60px;
+@keyframes glow {
+    0% { filter: drop-shadow(0 0 5px #fff); }
+    50% { filter: drop-shadow(0 0 20px #40e0d0); }
+    100% { filter: drop-shadow(0 0 5px #fff); }
 }
 
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(64,224,208,0.7); }
-    70% { box-shadow: 0 0 0 12px rgba(64,224,208,0); }
-    100% { box-shadow: 0 0 0 0 rgba(64,224,208,0); }
-}
-
-/* Confetti */
-.confetti {
+/* GIF */
+.gif-container {
     position: absolute;
-    width: 8px;
-    height: 8px;
-    top: 0;
-    opacity: 0.8;
-    animation: fall 1s linear forwards;
+    top: 33%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 113px;
 }
 
-@keyframes fall {
-    to {
-        transform: translateY(800px) rotate(720deg);
-        opacity: 0;
-    }
+/* Popup */
+.popup {
+    position: absolute;
+    width: 320px;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: all 0.8s ease;
+    z-index: 10;
+    text-align: center;
 }
 
-/* SCREEN 2 */
-.screen2 {
+.popup img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.7);
+}
+
+.popup h2 {
+    color: white;
+    margin-top: 15px;
+}
+
+/* Notification */
+.notification {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: top 0.5s ease;
+    z-index: 20;
+}
+
+.notification.show { top: 20px; }
+
+/* Face ID Overlay */
+.faceid-overlay {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(#ffb6c1, #40e0d0);
+    background: rgba(0,0,0,0.85);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    opacity: 0;
-    transition: opacity 1.5s ease;
-}
-
-.screen2 img {
-    width: 300px;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(255,255,255,0.6);
-}
-
-.screen2 h2 {
     color: white;
-    margin-top: 20px;
-    font-size: 20px;
-    text-align: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 30;
 }
 
-/* GIF */
-.gif-grid {
+.faceid-circle {
+    width: 120px;
+    height: 120px;
+    border: 4px solid white;
+    border-radius: 20px;
+    position: relative;
+}
+
+.scan-line {
     position: absolute;
-    bottom: 10px;
     width: 100%;
-    display: flex;
-    justify-content: center;
+    height: 4px;
+    background: #40e0d0;
+    animation: scan 2s linear infinite;
 }
 
-.gif-box {
-    width: 113px;
+@keyframes scan {
+    0% { top: 0; }
+    100% { top: 116px; }
+}
+
+.faceid-text {
+    margin-top: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 </style>
 </head>
 
 <body>
 
-<div class="overlay"></div>
+<audio id="bgMusic" src="shine-your-light.mp3" autoplay loop></audio>
+<audio id="coinSound" src="coin.mp3"></audio>
 
-<div class="screen1" id="screen1">
-    <h1>HAI BB, WILL YOU BE MY VALENTINE? 💕</h1>
+<div class="notification" id="notification">
+    <b>Messages</b><br>
+    From: Your BB 💖<br>
+    "Solid choice! 😘"
+</div>
 
+<div class="faceid-overlay" id="faceid">
+    <div class="faceid-circle">
+        <div class="scan-line"></div>
+    </div>
+    <div class="faceid-text" id="faceText">Face ID Scanning...</div>
+</div>
+
+<div class="gif-container" id="gifBox">
+    <div class="tenor-gif-embed"
+         data-postid="1312436877492002001"
+         data-share-method="host"
+         data-aspect-ratio="0.995745"
+         data-width="100%">
+    </div>
+</div>
+
+<div class="main-content" id="mainContent">
+    <h1>HAI BB, WILL YOU BE MY VALENTINE?</h1>
     <div class="buttons">
-        <button id="yesBtn">YES 💖</button>
-        <button id="noBtn">NO 😜</button>
+        <img src="yes.png" id="yesBtn">
+        <img src="no.png" id="noBtn">
     </div>
 </div>
 
-<div class="screen2" id="screen2">
-    <img src="image2.jpg" alt="Valentine">
-    <h2>I knew you would hehehehe! I LOVE U BEB! 💞</h2>
-</div>
-
-<div class="gif-grid">
-    <div class="gif-box">
-        <div class="tenor-gif-embed"
-             data-postid="1312436877492002001"
-             data-share-method="host"
-             data-aspect-ratio="0.995745"
-             data-width="100%">
-        </div>
-    </div>
+<div class="popup" id="popup">
+    <img src="image2.jpg">
+    <h2>I knew you would hehehehe! I LOVE U BEB! 💖</h2>
 </div>
 
 <script async src="https://tenor.com/embed.js"></script>
 
-<!-- Audio -->
-<audio id="coinSound" src="coin.mp3"></audio>
-<audio id="bgMusic" src="shine-your-light.mp3" loop></audio>
-
 <script>
 const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
-const screen1 = document.getElementById("screen1");
-const screen2 = document.getElementById("screen2");
+const notification = document.getElementById("notification");
+const popup = document.getElementById("popup");
+const mainContent = document.getElementById("mainContent");
+const gifBox = document.getElementById("gifBox");
 const coinSound = document.getElementById("coinSound");
-const bgMusic = document.getElementById("bgMusic");
+const faceid = document.getElementById("faceid");
+const faceText = document.getElementById("faceText");
 
-let noScale = 1;
-let noClicks = 0;
+/* Floating hearts */
+setInterval(() => {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 393 + "px";
+    heart.style.animationDuration = (Math.random()*3+3)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+},400);
 
-/* Start music on first tap (mobile autoplay fix) */
-document.body.addEventListener("click", function startMusic() {
-    bgMusic.play().catch(()=>{});
-    document.body.removeEventListener("click", startMusic);
-});
-
-/* NO Button Logic */
-noBtn.addEventListener("click", () => {
-    noClicks++;
-
-    if (noClicks >= 5) {
-        fakeCrash();
-        return;
-    }
-
-    let radius = 70;
-    let x = (Math.random() * radius * 2) - radius;
-    let y = (Math.random() * radius * 2) - radius;
-
-    noScale *= 0.85;
-    noBtn.style.transform = `translate(${x}px, ${y}px) scale(${noScale})`;
-});
-
-/* YES Button Logic */
+/* YES Click */
 yesBtn.addEventListener("click", () => {
+
     coinSound.play();
-    launchConfetti();
+
+    document.body.style.filter = "blur(6px)";
+    notification.classList.add("show");
 
     setTimeout(() => {
-        screen1.style.opacity = "0";
-        setTimeout(() => {
-            screen2.style.opacity = "1";
-        }, 1000);
-    }, 600);
+        notification.classList.remove("show");
+        faceid.style.opacity = "1";
+    }, 2000);
+
+    setTimeout(() => {
+        faceText.innerText = "Face ID Recognized ✓";
+    }, 4000);
+
+    setTimeout(() => {
+        faceid.style.opacity = "0";
+        gifBox.style.display = "none";
+        mainContent.style.display = "none";
+        document.body.style.filter = "blur(0)";
+        popup.style.opacity = "1";
+        popup.style.transform = "scale(1)";
+    }, 5200);
 });
-
-/* Confetti Explosion */
-function launchConfetti() {
-    for (let i = 0; i < 60; i++) {
-        let confetti = document.createElement("div");
-        confetti.classList.add("confetti");
-
-        confetti.style.left = Math.random() * 393 + "px";
-        confetti.style.backgroundColor =
-            ["#ff69b4", "#40e0d0", "#ffffff", "#ffd1dc"][Math.floor(Math.random()*4)];
-
-        confetti.style.animationDuration = (Math.random() * 1 + 0.5) + "s";
-
-        document.body.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 1200);
-    }
-}
-
-/* FAKE CRASH */
-function fakeCrash() {
-    document.body.innerHTML = `
-        <div style="
-            width:393px;
-            height:852px;
-            background:black;
-            color:#ff3b3b;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-            font-family:monospace;
-            text-align:center;
-            padding:20px;
-            animation: glitch 0.1s infinite alternate;
-        ">
-            <h2>⚠ SYSTEM ERROR ⚠</h2>
-            <p>App crashed due to emotional damage.</p>
-            <p>Rebooting love engine...</p>
-        </div>
-        <style>
-            @keyframes glitch {
-                from { transform: translateX(-2px); }
-                to { transform: translateX(2px); }
-            }
-        </style>
-    `;
-
-    setTimeout(() => {
-        document.body.innerHTML = `
-            <div style="
-                width:393px;
-                height:852px;
-                background:linear-gradient(#ffb6c1,#40e0d0);
-                display:flex;
-                flex-direction:column;
-                justify-content:center;
-                align-items:center;
-                font-family:'Comic Sans MS', cursive;
-                color:white;
-                text-align:center;
-                padding:20px;
-            ">
-                <h2>Just kidding... you can't escape 😘</h2>
-                <button onclick="location.reload()" style="
-                    margin-top:30px;
-                    padding:18px 40px;
-                    font-size:22px;
-                    border-radius:40px;
-                    border:none;
-                    background:#40e0d0;
-                    color:white;
-                    animation:pulse 1s infinite;
-                ">YES 💖</button>
-            </div>
-        `;
-    }, 2500);
-}
 </script>
 
 </body>
